@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config({path:'../config/.env'});
+dotenv.config({path:'src/config/.env'});
 
 import app from './app';
 
