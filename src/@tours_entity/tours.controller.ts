@@ -1,8 +1,6 @@
-import express from 'express';
 import Tour from './tours.model';
 import { Request, Response } from 'express';
 import ErrorHandler from '../../utils/errorHandler'
-const router = express.Router();
 
 // CREATE Tour
 export const createTour = async (req: any, res: any) => {

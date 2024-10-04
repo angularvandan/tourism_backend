@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dbConnect from './src/config/db';
-import { toursRouter, uploadRouter } from './src';
+import {  spotsRouter, toursRouter, uploadRouter } from './src';
 
 dbConnect();
 const app = express();
@@ -16,6 +16,9 @@ app.use(
 );
 
 app.use('/api/tours', toursRouter);
-app.use('/api/upload', uploadRouter)
+app.use('/api/spots',spotsRouter);
+
+app.use('/api/upload', uploadRouter);
+
 
 export default app;
