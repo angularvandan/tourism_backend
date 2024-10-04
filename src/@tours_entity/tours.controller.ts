@@ -7,14 +7,14 @@ const router = express.Router();
 // CREATE Tour
 export const createTour = async (req: any, res: any) => {
     try {
-        const { name, description, address, images, tips, price_adult, price_child, price_infant } = req.body;
+        const { name, title, description, address, images, tips, price_adult, price_child, price_infant } = req.body;
 
         // Additional validation if necessary
-        if (!name || !description || !address || !images || !tips || !price_adult || !price_child || !price_infant) {
+        if (!name || !title || !description || !address || !images || !tips || !price_adult || !price_child || !price_infant) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
-        const newTour = new Tour({ name, description, address, images, tips, price_adult, price_child, price_infant });
+        const newTour = new Tour({ name, title, description, address, images, tips, price_adult, price_child, price_infant });
         const savedTour = await newTour.save();
         res.status(201).json({ success: true, savedTour });
     } catch (error) {
