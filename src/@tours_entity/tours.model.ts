@@ -1,5 +1,7 @@
 import mongoose, {  Schema } from 'mongoose';
+interface ITips{
 
+}
 interface ITour {
     name: string;
     description: string;

@@ -3,6 +3,7 @@ import Tour from './tours.model'
 
 export const createTours = asyncHandler(async (req: any, res: any) => {
     const tour = new Tour(req.body);
+    console.log(tour);
     try {
         const savedTour = await tour.save();
         res.status(201).json(savedTour);
