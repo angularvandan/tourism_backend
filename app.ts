@@ -1,10 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import dbConnect from './src/config/db';
-import { toursRouter } from './src';
+import { toursRouter, uploadRouter } from './src';
 
 dbConnect();
-const app=express();
+const app = express();
 app.use(express.json());
 
 app.use(
@@ -16,6 +16,6 @@ app.use(
 );
 
 app.use('/api/tours', toursRouter);
-
+app.use('/api/upload', uploadRouter)
 
 export default app;
