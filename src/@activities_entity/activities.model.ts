@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-interface IActivity{
+interface IActivity {
     name: string;
     description: string;
     price_adult: number;
@@ -13,7 +13,7 @@ interface IActivity{
 const activitySchema: Schema = new Schema({
     name: { type: String, required: true },
     description: { type: String },
-    price_adult: { type: Number, required: true },
+    price_adult: { type: Number },
     price_child: { type: Number },
     price_infant: { type: Number },
     image: { type: String },
