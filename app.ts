@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dbConnect from './src/config/db';
-import {  spotsRouter, toursRouter, uploadRouter } from './src';
+import {  activityRouter, blogRouter, spotsRouter, toursRouter, uploadRouter } from './src';
 
 dbConnect();
 const app = express();
@@ -17,6 +17,8 @@ app.use(
 
 app.use('/api/tours', toursRouter);
 app.use('/api/spots',spotsRouter);
+app.use('/api/activities',activityRouter);
+app.use('/api/blogs',blogRouter);
 
 app.use('/api/upload', uploadRouter);
 

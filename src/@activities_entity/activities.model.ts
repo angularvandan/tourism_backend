@@ -18,6 +18,9 @@ const activitySchema: Schema = new Schema({
     price_infant: { type: Number },
     image: { type: String },
     spot_id: { type: mongoose.Types.ObjectId, ref: 'Spot' }
+},
+{
+    timestamps: true // Adds createdAt and updatedAt fields
 });
 
 const Activity = mongoose.model<IActivity>('Activity', activitySchema);
