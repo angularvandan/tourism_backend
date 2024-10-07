@@ -103,7 +103,8 @@
     "src/**/*",
     "server.ts",
     "app.ts",
-    "utils"
+    "utils",
+    "middleware"
   ],
   "exclude": [
     "node_modules"
