@@ -5,6 +5,7 @@ import { activityRouter } from './@activities_entity/activities.index';
 import { blogRouter } from "./@blog_entity/blog.index";
 
 import userRouter from './@user_entity/user.router';
+import { bookingRouter } from "./@booking_entity/booking.index";
 
-export { toursRouter, uploadRouter, spotsRouter, activityRouter, blogRouter,userRouter }
+export { toursRouter, uploadRouter, spotsRouter, activityRouter, blogRouter,userRouter,bookingRouter }
 

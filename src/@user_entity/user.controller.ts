@@ -9,12 +9,12 @@ export const register = async (req: any, res: any, next: any) => {
     }
 
     try {
-        const newUser = new userModel({ name, email, password, phone, role })
-        const user = await newUser.save()
-        const token = user.getJWTToken()
-        res.status(200).json({ success: true, message: "User created successfully!", user, token })
+        const newUser = new userModel({ name, email, password, phone, role });
+        const user = await newUser.save();
+        const token = user.getJWTToken();
+        res.status(200).json({ success: true, message: "User created successfully!", user, token });
     } catch (error: any) {
-        res.status(500).json({ success: false, error })
+        res.status(500).json({ success: false, error });
     }
 
 }
