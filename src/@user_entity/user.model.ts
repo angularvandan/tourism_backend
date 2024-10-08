@@ -18,6 +18,8 @@ const userSchema: Schema = new Schema({
     password: { type: String, required: true },
     phone: { type: String, required: true },
     role: { type: String, default: 'admin' }
+},{
+    timestamps:true
 });
 
 userSchema.pre("save", async function (next) {
