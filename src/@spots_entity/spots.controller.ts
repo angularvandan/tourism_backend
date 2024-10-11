@@ -4,7 +4,15 @@ import Tour from '../@tours_entity/tours.model'; // Import Tour to validate refe
 
 // Get all spots
 export const getSpots = asyncHandler(async (req: any, res: any) => {
-    const spots = await Spot.find().populate('tour_id'); // Populating tour_id to get tour details
+    const { id } = req.params; // Extracting tourId from request params
+
+    // Find spots where tour_id matches the tourId from the request params
+    const spots = await Spot.find({ tour_id: id }).populate('tour_id'); // Populating tour_id to get tour details
+
+    if (!spots || spots.length === 0) {
+        return res.status(404).json({ message: 'No spots found for this tour' });
+    }
+
     res.status(200).json(spots);
 });
 
@@ -20,7 +28,7 @@ export const getSpotById = asyncHandler(async (req: any, res: any) => {
 
 // Create a new spot
 export const createSpot = asyncHandler(async (req: any, res: any) => {
-    const { name,tips,images,price_adult,price_child,price_infant,tour_id } = req.body;
+    const { name, tips, images, price_adult, price_child, price_infant, tour_id } = req.body;
 
     // Additional validation if necessary
     if (!name || !tips || !images || !price_adult || !price_child || !price_infant) {
@@ -64,6 +72,6 @@ export const deleteSpot = asyncHandler(async (req: any, res: any) => {
     if (!deletedSpot) {
         res.status(404).json({ message: 'Spot not found' });
     } else {
-        res.status(200).json({ message:'Spot Deleted Successfully!'});
+        res.status(200).json({ message: 'Spot Deleted Successfully!' });
     }
 });
