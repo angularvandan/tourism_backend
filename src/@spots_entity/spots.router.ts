@@ -1,11 +1,12 @@
 import { Router } from 'express';
-import { createSpot, deleteSpot, getSpotById, getSpots, updateSpot } from './spots.controller';
+import { createSpot, deleteSpot, getSpotById, getSpots, getSpotsByTourId, updateSpot } from './spots.controller';
 
 const router = Router();
 
 router.post('/', createSpot);
-router.get('/:id', getSpots);
-router.get('/:id', getSpotById);
+router.get('/', getSpots);
+router.get('/:id', getSpotsByTourId);
+router.get('/spot/:id', getSpotById);
 router.put('/:id', updateSpot);
 router.delete('/:id', deleteSpot);
 

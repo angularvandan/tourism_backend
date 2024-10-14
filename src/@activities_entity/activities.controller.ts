@@ -4,10 +4,16 @@ import Spot from '../@spots_entity/spots.model'; // Import Spot to validate refe
 
 // Get all activities
 export const getActivities = asyncHandler(async (req: any, res: any) => {
-    const activities = await Activity.find().populate('spot_id'); 
+    const { id } = req.params; 
+    const activities = await Activity.find({spot_id:id}).populate('spot_id'); 
     res.status(200).json(activities);
 });
-
+// Get all activities
+export const getActivitiesBySpotId = asyncHandler(async (req: any, res: any) => {
+    const { id } = req.params; 
+    const activities = await Activity.find({spot_id:id}).populate('spot_id'); 
+    res.status(200).json(activities);
+});
 // Get a single activity by ID
 export const getActivityById = asyncHandler(async (req: any, res: any) => {
     const activity = await Activity.findById(req.params.id).populate('spot_id');

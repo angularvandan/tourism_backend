@@ -4,14 +4,16 @@ import {
     getActivityById,
     createActivity,
     updateActivity,
-    deleteActivity
+    deleteActivity,
+    getActivitiesBySpotId
 } from './activities.controller';
 
 const router = Router();
 
 // Define routes for activities
+router.get('/:id', getActivitiesBySpotId);             
 router.get('/', getActivities);             
-router.get('/:id', getActivityById);        
+router.get('activity/:id', getActivityById);        
 router.post('/', createActivity);           
 router.put('/:id', updateActivity);         
 router.delete('/:id', deleteActivity);      

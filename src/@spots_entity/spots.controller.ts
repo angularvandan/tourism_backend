@@ -4,6 +4,19 @@ import Tour from '../@tours_entity/tours.model'; // Import Tour to validate refe
 
 // Get all spots
 export const getSpots = asyncHandler(async (req: any, res: any) => {
+
+    // Find spots where tour_id matches the tourId from the request params
+    const spots = await Spot.find().populate('tour_id'); // Populating tour_id to get tour details
+
+    if (!spots || spots.length === 0) {
+        return res.status(404).json({ message: 'No spots found for this tour' });
+    }
+
+    res.status(200).json(spots);
+});
+
+// Get all spots
+export const getSpotsByTourId = asyncHandler(async (req: any, res: any) => {
     const { id } = req.params; // Extracting tourId from request params
 
     // Find spots where tour_id matches the tourId from the request params
