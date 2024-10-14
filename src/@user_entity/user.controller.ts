@@ -5,6 +5,7 @@ import validator from "validator";
 
 
 export const register = async (req: any, res: any, next: any) => {
+    console.log(req);
     const { name, email, password, phone, role } = req.body
 
     if (!name || !email || !password || !phone || !role) {
