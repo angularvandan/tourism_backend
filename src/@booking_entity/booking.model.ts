@@ -6,7 +6,7 @@ interface IBooking {
     user_email?: string;
     user_address?: string;
     totalPrice: string;
-    tours_id: mongoose.Types.ObjectId;
+    tours_details: any[];
     payNow: boolean;
 }
 
@@ -16,7 +16,7 @@ const bookingSchema: Schema = new Schema({
     user_email: { type: String },
     user_address: { type: String },
     totalPrice: { type: String },
-    tours_id: { type: mongoose.Types.ObjectId, ref: 'Tour' },
+    tours_details: { type: Array, required: true },
     payNow: { type: Boolean }
 });
 

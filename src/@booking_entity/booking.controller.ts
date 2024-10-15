@@ -15,7 +15,7 @@ export const getBookingById = asyncHandler(async (req: any, res: any) => {
 
 // Create a new booking with inline validation
 export const createBooking = asyncHandler(async (req: any, res: any) => {
-    const { user_name, user_mobile, user_email, user_address, totalPrice, tours_id, payNow } = req.body;
+    const { user_name, user_mobile, user_email, user_address, totalPrice, tours_details, payNow } = req.body;
 
     // Validate required fields
     if (
@@ -24,18 +24,18 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
         !user_email ||
         !user_address ||
         !totalPrice ||
-        !tours_id ||
+        !tours_details ||
         typeof payNow !== 'boolean'
     ) {
         return res.status(400).json({
-            message: 'All fields are required: user_name, user_mobile, user_email, user_address, totalPrice, tours_id, and payNow.'
+            message: 'All fields are required: user_name, user_mobile, user_email, user_address, totalPrice, tours_details, and payNow.'
         });
     }
 
     // Ensure the referenced tour exists
-    const tour = await Tour.findById(tours_id);
+    const tour = await Tour.findById(user_email);
     if (!tour) {
-        return res.status(400).json({ message: 'Invalid tours_id, Tour not found' });
+        return res.status(400).json({ message: 'Invalid email, Tour not found' });
     }
 
     // Create and save the booking
@@ -45,7 +45,7 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
         user_email,
         user_address,
         totalPrice,
-        tours_id,
+        tours_details,
         payNow
     });
 
