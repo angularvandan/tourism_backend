@@ -5,7 +5,7 @@ import Tour from '../@tours_entity/tours.model'; // Import Tour to validate refe
 
 // Get a single booking by ID
 export const getBookingById = asyncHandler(async (req: any, res: any) => {
-    const booking = await Booking.findById(req.params.id).populate('tours_id');
+    const booking = await Booking.findById(req.params.id);
     if (!booking) {
         res.status(404).json({ message: 'Booking not found' });
     } else {
