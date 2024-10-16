@@ -2,6 +2,15 @@ import asyncHandler from 'express-async-handler';
 import Booking from './booking.model';
 import Tour from '../@tours_entity/tours.model'; // Import Tour to validate references
 
+//get all booking
+export const getBookings=asyncHandler(async(req:any, res:any)=>{
+    const bookings=await Booking.find().sort({ createdAt: -1 });
+    if(!bookings){
+        res.status(404).json({ message: 'Booking not found' });
+    }else{
+        res.status(200).json(bookings);
+    }
+});
 // Get a single booking by ID
 export const getBookingById = asyncHandler(async (req: any, res: any) => {
     const booking = await Booking.findById(req.params.id);
