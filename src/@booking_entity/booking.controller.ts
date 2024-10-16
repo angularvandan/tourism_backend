@@ -2,7 +2,6 @@ import asyncHandler from 'express-async-handler';
 import Booking from './booking.model';
 import Tour from '../@tours_entity/tours.model'; // Import Tour to validate references
 
-
 // Get a single booking by ID
 export const getBookingById = asyncHandler(async (req: any, res: any) => {
     const booking = await Booking.findById(req.params.id);
@@ -15,7 +14,7 @@ export const getBookingById = asyncHandler(async (req: any, res: any) => {
 
 // Create a new booking with inline validation
 export const createBooking = asyncHandler(async (req: any, res: any) => {
-    const { user_name, user_mobile, user_email, user_address, adult_price, children_price, infant_price, totalPrice, tours_details, payNow } = req.body;
+    const { user_name, user_mobile, user_email, user_address, totalPrice, tours_details, payNow, priceDetails } = req.body;
 
     // Validate required fields
     if (
@@ -25,33 +24,35 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
         !user_address ||
         !totalPrice ||
         !tours_details ||
-        !adult_price ||
-        !children_price ||
-        !infant_price ||
+        !priceDetails?.adult ||
+        !priceDetails?.child ||
+        !priceDetails?.infant ||
         typeof payNow !== 'boolean'
     ) {
         return res.status(400).json({
-            message: 'All fields are required: user_name, user_mobile, user_email, user_address, totalPrice,adult_price,children_price,infant_price, tours_details, and payNow.'
+            message: 'All fields are required: user_name, user_mobile, user_email, user_address, totalPrice, priceDetails (with adult, child, infant details), tours_details, and payNow.'
         });
     }
 
     // Ensure the referenced tour exists
     const tour = await Tour.findById(tours_details[0]._id);
     if (!tour) {
-        return res.status(400).json({ message: 'Invalid email, Tour not found' });
+        return res.status(400).json({ message: 'Tour not found' });
     }
 
-    // Create and save the booking
+    // Create and save the booking with priceDetails object
     const booking = new Booking({
         user_name,
         user_mobile,
         user_email,
         user_address,
-        adult_price,
-        children_price,
-        infant_price,
         totalPrice,
         tours_details,
+        priceDetails: {
+            adult: priceDetails.adult,
+            child: priceDetails.child,
+            infant: priceDetails.infant
+        },
         payNow
     });
 

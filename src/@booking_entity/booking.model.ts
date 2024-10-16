@@ -1,17 +1,31 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document } from 'mongoose';
 
-interface IBooking {
+interface IPriceDetail {
+    count: number;
+    price: number;
+    totalPrice: number;
+}
+
+interface IBooking extends Document {
     user_name: string;
     user_mobile?: string;
     user_email?: string;
     user_address?: string;
     totalPrice: string;
     tours_details: any[];
-    adult_price: number;
-    children_price: number;
-    infant_price: number;
+    priceDetails: {
+        adult: IPriceDetail;
+        child: IPriceDetail;
+        infant: IPriceDetail;
+    };
     payNow: boolean;
 }
+
+const priceDetailSchema: Schema = new Schema({
+    count: { type: Number, required: true },
+    price: { type: Number, required: true },
+    totalPrice: { type: Number, required: true }
+});
 
 const bookingSchema: Schema = new Schema({
     user_name: { type: String, required: true },
@@ -19,10 +33,12 @@ const bookingSchema: Schema = new Schema({
     user_email: { type: String },
     user_address: { type: String },
     totalPrice: { type: String },
-    adult_price: { type: Number, required: true },    // New field
-    children_price: { type: Number, required: true }, // New field
-    infant_price: { type: Number, required: true },    // New field
     tours_details: { type: Array, required: true },
+    priceDetails: {
+        adult: { type: priceDetailSchema, required: true, default: { count: 1, price: 0, totalPrice: 0 } },
+        child: { type: priceDetailSchema, required: true, default: { count: 1, price: 0, totalPrice: 0 } },
+        infant: { type: priceDetailSchema, required: true, default: { count: 1, price: 0, totalPrice: 0 } }
+    },
     payNow: { type: Boolean }
 });
 
