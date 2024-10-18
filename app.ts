@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dbConnect from './src/config/db';
-import {  activityRouter, blogRouter, bookingRouter, contactRouter, feedbackRouter, spotsRouter, toursRouter, uploadRouter, userRouter } from './src';
+import { activityRouter, blogRouter, bookingRouter, contactRouter, feedbackRouter, paymentRouter, spotsRouter, toursRouter, uploadRouter, userRouter } from './src';
+import { paypalWebhook } from './utils/paypal';
 
 dbConnect();
 const app = express();
@@ -16,17 +17,20 @@ app.use(
 );
 
 app.use('/api/tours', toursRouter);
-app.use('/api/spots',spotsRouter);
-app.use('/api/activities',activityRouter);
-app.use('/api/blogs',blogRouter);
 app.use('/api/spots', spotsRouter);
-app.use('/api/booking',bookingRouter);
+app.use('/api/activities', activityRouter);
+app.use('/api/blogs', blogRouter);
+app.use('/api/spots', spotsRouter);
+app.use('/api/booking', bookingRouter);
 app.use('/api/user', userRouter);
 
-app.use('/api/feedback',feedbackRouter)
-app.use('/api/contact',contactRouter)
+app.use('/api/feedback', feedbackRouter)
+app.use('/api/contact', contactRouter)
 
 app.use('/api/upload', uploadRouter);
+app.use('/api/payment', paymentRouter);
+
+app.post("/webhook/paypal", paypalWebhook);
 
 
 export default app;
