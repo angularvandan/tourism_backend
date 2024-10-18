@@ -11,7 +11,7 @@ import {
 const router = Router();
 
 // Define routes for activities
-router.get('/:id', getActivitiesBySpotId);             
+router.get('/spot/:id', getActivitiesBySpotId);             
 router.get('/', getActivities);             
 router.get('activity/:id', getActivityById);        
 router.post('/', createActivity);           

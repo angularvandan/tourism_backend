@@ -40,7 +40,7 @@ const bookingSchema: Schema = new Schema({
         infant: { type: priceDetailSchema, required: true, default: { count: 1, price: 0, totalPrice: 0 } }
     },
     payNow: { type: Boolean }
-});
+}, { timestamps: true });
 
 const Booking = mongoose.model<IBooking>('Booking', bookingSchema);
 export default Booking;
