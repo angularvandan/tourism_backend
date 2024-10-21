@@ -3,6 +3,6 @@ import { createOrder } from './payment.controller';
 
 const router = Router();
 
-router.get('/create', createOrder);
+router.post('/create', createOrder);
 
 export default router;

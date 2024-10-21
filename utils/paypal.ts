@@ -1,5 +1,4 @@
 import axios from "axios";
-import crypto from "crypto";
 import qs from "qs";
 
 const { PAYPAL_CLIENT_KEY, PAYPAL_SECRET_KEY, PAYPAL_BASE_URL, PAYPAL_WEBHOOK_ID } = process.env;
@@ -94,7 +93,10 @@ const generateAccessToken = async () => {
     const axiosInfo = { grant_type: "client_credentials" };
     try {
         const { data } = await axios.post(url, qs.stringify(axiosInfo), {
-            headers: { Authorization: `Basic ${auth}` },
+            headers: {
+                Authorization: `Basic ${auth}`,
+                'Content-Type': 'application/x-www-form-urlencoded' // Ensure the content type is correct
+            },
         });
 
         return data.access_token;

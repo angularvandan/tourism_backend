@@ -4,6 +4,7 @@ import generateAccessToken from "../../utils/paypal"
 
 // Create PayPal payment
 export const createOrder = async (req: Request, res: Response) => {
+    const { amount } = req.body; // Get amount from request body
 
     try {
         const accessToken = await generateAccessToken();
@@ -14,7 +15,7 @@ export const createOrder = async (req: Request, res: Response) => {
                 {
                     amount: {
                         currency_code: 'USD',
-                        value: '100.00' // Replace with dynamic value
+                        value: amount // Replace with dynamic value
                     }
                 }
             ]
