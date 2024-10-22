@@ -9,5 +9,6 @@ import { bookingRouter } from "./@booking_entity/booking.index";
 import { feedbackRouter } from "./@feedback_form/feedback.index";
 import { contactRouter } from "./@contactus_form/contact.index";
 import paymentRouter from "./@payment_entity/payment.router"
-export { toursRouter, uploadRouter, spotsRouter, activityRouter, blogRouter, userRouter, bookingRouter, feedbackRouter, contactRouter, paymentRouter }
+import { bannerRouter } from "./@home_banner/banner.index";
+export { toursRouter, uploadRouter, spotsRouter, activityRouter, blogRouter, userRouter, bookingRouter, feedbackRouter, contactRouter, paymentRouter,bannerRouter }
 
