@@ -45,6 +45,6 @@ export const deleteBanner = asyncHandler(async (req: Request, res: Response) => 
     if (!banner) {
         res.status(404).json({ message: 'Banner not found' });
     } else {
-        res.status(204).send();
+        res.status(200).json({ message: 'Deleted Successfully!' });
     }
 });
