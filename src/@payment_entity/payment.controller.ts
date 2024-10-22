@@ -14,17 +14,33 @@ export const createOrder = async (req: Request, res: Response) => {
             purchase_units: [
                 {
                     amount: {
-                        currency_code: 'USD',
+                        currency_code: 'NZD',
                         value: amount // Replace with dynamic value
                     }
                 }
-            ]
+            ],
+            // payment_source: {
+            //     card: {
+            //         name: "Yash",
+            //         number: "2223000048400011",
+            //         security_code: "111",
+            //         expiry: "2025-09",
+            //         billing_address: {
+            //             address_line_1: "test",
+            //             address_line_2: "test",
+            //             admin_area_1: "test",
+            //             admin_area_2: "test",
+            //             postal_code: "2222",
+            //             country_code: "NZ",
+            //         }
+            //     }
+            // },
         };
 
         const response = await axios.post('https://api-m.sandbox.paypal.com/v2/checkout/orders', orderData, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }
         });
 
