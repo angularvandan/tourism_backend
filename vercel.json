@@ -1,7 +1,7 @@
 {
     "version": 2,
     "functions": {
-      "src/**/*.ts": {
+      "src/*.js": {
         "runtime": "nodejs18.x" 
       }
     },
