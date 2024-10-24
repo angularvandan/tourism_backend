@@ -18,6 +18,7 @@ interface IBooking extends Document {
         child: IPriceDetail;
         infant: IPriceDetail;
     };
+    paymentStatus:string;
     payNow: boolean;
 }
 
@@ -39,6 +40,7 @@ const bookingSchema: Schema = new Schema({
         child: { type: priceDetailSchema, required: true, default: { count: 1, price: 0, totalPrice: 0 } },
         infant: { type: priceDetailSchema, required: true, default: { count: 1, price: 0, totalPrice: 0 } }
     },
+    paymentStatus: { type: String,required: true },
     payNow: { type: Boolean }
 }, { timestamps: true });
 

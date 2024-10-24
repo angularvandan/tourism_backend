@@ -3,6 +3,7 @@ import {
     getBookingById,
     createBooking,
     getBookings,
+    updatePaymentStatus,
 } from './booking.controller';
 
 const router = Router();
@@ -11,5 +12,6 @@ const router = Router();
 router.get('/:id', getBookingById);
 router.get('/', getBookings);
 router.post('/', createBooking);        
+router.patch('/:id', updatePaymentStatus);        
 
 export default router;

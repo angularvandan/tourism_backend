@@ -8,7 +8,8 @@ import userRouter from './@user_entity/user.router';
 import { bookingRouter } from "./@booking_entity/booking.index";
 import { feedbackRouter } from "./@feedback_form/feedback.index";
 import { contactRouter } from "./@contactus_form/contact.index";
-import paymentRouter from "./@payment_entity/payment.router"
+
 import { bannerRouter } from "./@home_banner/banner.index";
+import { paymentRouter } from "./@payment_entity/paymet.index";
 export { toursRouter, uploadRouter, spotsRouter, activityRouter, blogRouter, userRouter, bookingRouter, feedbackRouter, contactRouter, paymentRouter,bannerRouter }
 

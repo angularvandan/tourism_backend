@@ -23,7 +23,7 @@ export const getBookingById = asyncHandler(async (req: any, res: any) => {
 
 // Create a new booking with inline validation
 export const createBooking = asyncHandler(async (req: any, res: any) => {
-    const { user_name, user_mobile, user_email, user_address, totalPrice, tours_details, payNow, priceDetails } = req.body;
+    const { user_name, user_mobile, user_email, user_address, totalPrice, tours_details, payNow, priceDetails , paymentStatus} = req.body;
 
     // Validate required fields
     if (
@@ -36,10 +36,12 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
         !priceDetails?.adult ||
         !priceDetails?.child ||
         !priceDetails?.infant ||
-        typeof payNow !== 'boolean'
+        typeof payNow !== 'boolean'||
+        typeof paymentStatus !== 'boolean'
+
     ) {
         return res.status(400).json({
-            message: 'All fields are required: user_name, user_mobile, user_email, user_address, totalPrice, priceDetails (with adult, child, infant details), tours_details, and payNow.'
+            message: 'All fields are required: user_name, user_mobile, user_email, user_address, totalPrice, priceDetails (with adult, child, infant details), tours_details,paymentStatus and payNow.'
         });
     }
 
@@ -62,9 +64,33 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
             child: priceDetails.child,
             infant: priceDetails.infant
         },
-        payNow
+        payNow,
+        paymentStatus
     });
 
     const savedBooking = await booking.save();
     res.status(201).json(savedBooking);
+});
+// Update only the paymentStatus of a booking
+export const updatePaymentStatus = asyncHandler(async (req: any, res: any) => {
+    const { id } = req.params;
+    const { paymentStatus } = req.body;
+
+    // Validate the paymentStatus field
+    if (paymentStatus !== 'Completed' && paymentStatus !== 'Pending') {
+        return res.status(400).json({ message: 'Invalid payment status. It must be either "Completed" or "Pending".' });
+    }
+
+    // Find the booking by ID and update paymentStatus
+    const booking = await Booking.findByIdAndUpdate(
+        id,
+        { paymentStatus },
+        { new: true } // Return the updated booking
+    );
+
+    if (!booking) {
+        return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    res.status(200).json(booking);
 });
