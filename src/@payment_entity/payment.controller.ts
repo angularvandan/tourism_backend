@@ -76,6 +76,10 @@ export const storePaymentDetails = asyncHandler(async (req: any, res: any) => {
         booking.paymentStatus = 'Completed';  // Assuming the booking model has a paymentStatus field
         await booking.save();  // Save the updated booking
     }
+    else{
+        booking.paymentStatus = 'Pending';  // Assuming the booking model has a paymentStatus field
+        await booking.save(); 
+    }
 
     const payment = new Payment({
         orderID,
@@ -95,7 +99,7 @@ export const storePaymentDetails = asyncHandler(async (req: any, res: any) => {
 });
 
 export const getAllPayments = asyncHandler(async (req: Request, res: Response) => {
-    const payments = await Payment.find({});
+    const payments = await Payment.find({}).sort({ paymentDate: -1 }).populate('bookingId');
     if (payments.length === 0) {
         res.status(404).json({ message: 'No payment details found' });
     } else {

@@ -18,11 +18,11 @@
 
 // const Payment = mongoose.model<IPayment>('Payment', paymentSchema);
 // export default Payment;
-import { Schema, model, Document } from 'mongoose';
+import mongoose, { Schema, model, Document } from 'mongoose';
 
 interface PaymentDocument extends Document {
   orderID: string;
-  bookingId: string;
+  bookingId: Schema.Types.ObjectId;  // Use Schema.Types.ObjectId for compatibility
   amount: number;
   paymentStatus: string;
   payerID?: string;
@@ -31,7 +31,7 @@ interface PaymentDocument extends Document {
 
 const paymentSchema = new Schema<PaymentDocument>({
   orderID: { type: String, required: true },
-  bookingId: { type: String, required: true },
+  bookingId: { type: Schema.Types.ObjectId, ref: 'Booking', required: true },  // Reference Booking model
   amount: { type: Number, required: true },
   paymentStatus: { type: String, required: true },
   payerID: { type: String },

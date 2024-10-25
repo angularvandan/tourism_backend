@@ -37,7 +37,7 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
         !priceDetails?.child ||
         !priceDetails?.infant ||
         typeof payNow !== 'boolean'||
-        typeof paymentStatus !== 'boolean'
+        !paymentStatus
 
     ) {
         return res.status(400).json({
