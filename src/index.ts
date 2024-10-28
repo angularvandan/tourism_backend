@@ -11,5 +11,7 @@ import { contactRouter } from "./@contactus_form/contact.index";
 
 import { bannerRouter } from "./@home_banner/banner.index";
 import { paymentRouter } from "./@payment_entity/paymet.index";
-export { toursRouter, uploadRouter, spotsRouter, activityRouter, blogRouter, userRouter, bookingRouter, feedbackRouter, contactRouter, paymentRouter,bannerRouter }
+import { privacyPolicyRouter } from "./@privacy_policy/privacy.index";
+
+export { toursRouter, uploadRouter, spotsRouter, activityRouter, blogRouter, userRouter, bookingRouter, feedbackRouter, contactRouter, paymentRouter,bannerRouter,privacyPolicyRouter }
 

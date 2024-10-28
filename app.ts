@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dbConnect from './src/config/db';
-import { activityRouter, bannerRouter, blogRouter, bookingRouter, contactRouter, feedbackRouter, paymentRouter, spotsRouter, toursRouter, uploadRouter, userRouter } from './src';
+import { activityRouter, bannerRouter, blogRouter, bookingRouter, contactRouter, feedbackRouter, paymentRouter, privacyPolicyRouter, spotsRouter, toursRouter, uploadRouter, userRouter } from './src';
 import { paypalWebhook } from './utils/paypal';
 
 dbConnect();
@@ -30,6 +30,8 @@ app.use('/api/banner', bannerRouter)
 
 app.use('/api/upload', uploadRouter);
 app.use('/api/payment', paymentRouter);
+
+app.use('/api/privacy-policy',privacyPolicyRouter);
 
 app.post("/webhook/paypal", paypalWebhook);
 
