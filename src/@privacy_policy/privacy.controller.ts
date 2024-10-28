@@ -6,7 +6,7 @@ import PrivacyPolicy, { IPrivacyPolicy } from './privacy.model';
 
 // Get Privacy Policy
 export const getPrivacyPolicy = asyncHandler(async (req: Request, res: Response) => {
-    const policy: IPrivacyPolicy | null = await PrivacyPolicy.findOne().sort({ updatedAt: -1 });
+    const policy: IPrivacyPolicy[] | null = await PrivacyPolicy.find().sort({ updatedAt: -1 });
     if (!policy) {
         res.status(404).json({ message: 'Privacy Policy not found' });
     } else {
@@ -16,29 +16,43 @@ export const getPrivacyPolicy = asyncHandler(async (req: Request, res: Response)
 
 // Create Privacy Policy
 export const createPrivacyPolicy = asyncHandler(async (req: Request, res: Response) => {
-    const { content } = req.body;
+    const { privacyContent } = req.body;
 
-    if (!content) {
+    if (!privacyContent) {
         res.status(400).json({ message: 'Content is required' });
         return;
     }
 
-    const newPolicy = new PrivacyPolicy({ content });
+    const newPolicy = new PrivacyPolicy({ privacyContent });
     const createdPolicy = await newPolicy.save();
     res.status(201).json(createdPolicy);
 });
 
-// Update Privacy Policy
+// Update Privacy Policy by ID
 export const updatePrivacyPolicy = asyncHandler(async (req: Request, res: Response) => {
-    const { content } = req.body;
-    let policy = await PrivacyPolicy.findOne();
-    
-    if (policy) {
-        policy.content = content;
-    } else {
-        policy = new PrivacyPolicy({ content });
-    }
+    const { id } = req.params;
+    const { privacyContent } = req.body;
 
-    const updatedPolicy = await policy.save();
-    res.json(updatedPolicy);
+    // Find and update the policy by ID
+    const policy = await PrivacyPolicy.findById(id);
+
+    if (policy) {
+        policy.privacyContent = privacyContent;
+        const updatedPolicy = await policy.save();
+        res.json(updatedPolicy);
+    } else {
+        res.status(404).json({ message: 'Privacy Policy not found' });
+    }
 });
+// Delete Privacy Policy by ID
+export const deletePrivacyPolicy = asyncHandler(async (req: any, res: any) => {
+    const { id } = req.params;
+  
+    const policy = await PrivacyPolicy.findByIdAndDelete(id);
+  
+    if (!policy) {
+      return res.status(404).json({ message: 'Privacy Policy not found' });
+    }
+  
+    res.status(200).json({ message: 'Privacy Policy deleted successfully' });
+  });

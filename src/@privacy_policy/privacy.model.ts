@@ -3,13 +3,13 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IPrivacyPolicy extends Document {
-    content: string;
+    privacyContent: string;
     updatedAt: Date;
 }
 
 const PrivacyPolicySchema: Schema = new Schema(
     {
-        content: { type: String, required: true },
+        privacyContent: { type: String, required: true },
     },
     { timestamps: true }
 );
