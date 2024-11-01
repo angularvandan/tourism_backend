@@ -58,12 +58,14 @@ export const createOrder = async (req: Request, res: Response) => {
 };
 
 
-export const storePaymentDetails = asyncHandler(async (req: any, res: any) => {
-    const { orderID, bookingId, amount, paymentStatus, payerID } = req.body;
+export const storePaymentDetails = asyncHandler(async (req:any, res:any) => {
+    const { orderID, bookingId, amount, paymentStatus, payerID, errorMessage, errorDetails } = req.body;
 
+    // Check for required fields
     if (!orderID || !bookingId || !amount || !paymentStatus) {
-        res.status(400).json({ message: 'Missing required payment details' });
+        return res.status(400).json({ message: 'Missing required payment details' });
     }
+
     // Find the booking by bookingId
     const booking = await Booking.findById(bookingId);
 
@@ -71,30 +73,35 @@ export const storePaymentDetails = asyncHandler(async (req: any, res: any) => {
         return res.status(404).json({ message: 'Booking not found' });
     }
 
-    // If payment is successfully done, update the paymentStatus in the Booking model
-    if (paymentStatus === 'Completed') {
-        booking.paymentStatus = 'Completed';  // Assuming the booking model has a paymentStatus field
-        await booking.save();  // Save the updated booking
+    // Update the booking payment status based on the payment status
+    if (paymentStatus.toLowerCase() === 'completed') {
+        booking.paymentStatus = 'Completed'; // Assuming the booking model has a paymentStatus field
+    } else {
+        booking.paymentStatus = 'Pending'; // Change to 'Failed' or another status as necessary
     }
-    else{
-        booking.paymentStatus = 'Pending';  // Assuming the booking model has a paymentStatus field
-        await booking.save(); 
-    }
+    
+    // Save the updated booking
+    await booking.save();
 
+    // Create a new payment object
     const payment = new Payment({
         orderID,
         bookingId,
         amount,
         paymentStatus,
         payerID,
+        errorMessage: paymentStatus.toLowerCase() === 'completed' ? undefined : errorMessage,
+        errorDetails: paymentStatus.toLowerCase() === 'completed' ? undefined : errorDetails,
     });
 
+    // Save the payment details
     const savedPayment = await payment.save();
 
+    // Send response
     res.status(201).json({
         message: 'Payment processed and booking updated',
         payment: savedPayment,
-        booking
+        booking,
     });
 });
 
