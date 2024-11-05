@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { createOrder, getAllPayments, getPaymentById, storePaymentDetails } from './payment.controller';
+import { auth } from '../../middleware/auth';
 
 const router = Router();
 

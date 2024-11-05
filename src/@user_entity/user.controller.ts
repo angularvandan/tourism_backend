@@ -44,13 +44,17 @@ export const login = async (req: any, res: any, next: any) => {
         const user = await userModel.findOne({ email }).select("+password");
 
         if (!user) {
-            return next(new ErrorHandler("Invalid email or password", 401));
+            return res.status(401).json({ message: 'Invalid email or password' });
+
+            // return next(new ErrorHandler("Invalid email or password", 401));
         }
 
         const isPasswordMatched = await bcrypt.compare(password, user.password);
 
         if (!isPasswordMatched) {
-            return next(new ErrorHandler("Invalid email or password", 401));
+            return res.status(401).json({ message: 'Invalid email or password' });
+
+            // return next(new ErrorHandler("Invalid email or password", 401));
         }
 
         const token = user.getJWTToken();
@@ -73,3 +77,17 @@ export const login = async (req: any, res: any, next: any) => {
         next(new ErrorHandler(error.message, 500));
     }
 };
+export const getUsers= async(req:any,res:any,next:any)=>{
+    try{
+
+        const users= await userModel.find();
+        res.status(200).json({
+            success: true,
+            message: "Users fetched successfully!",
+            users,
+        });
+
+    }catch(error:any){
+        next(new ErrorHandler(error.message, 500));
+    }
+}
