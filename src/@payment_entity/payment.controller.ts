@@ -99,18 +99,18 @@ export const storePaymentDetails = asyncHandler(async (req:any, res:any) => {
     const savedPayment = await payment.save();
 
     // Prepare email details
-    // const subject = `Payment Status: ${paymentStatus}`;
-    // const text = `Booking ID: ${bookingId}\nAmount: ${amount}\nPayment Status: ${paymentStatus}\nPayer ID: ${payerID}`;
-    // const html = `
-    //     <h1>Payment Status: ${paymentStatus}</h1>
-    //     <p><strong>Booking ID:</strong> ${bookingId}</p>
-    //     <p><strong>Amount:</strong> ${amount}</p>
-    //     <p><strong>Payment Status:</strong> ${paymentStatus}</p>
-    //     <p><strong>Payer ID:</strong> ${payerID}</p>
-    // `;
+    const subject = `Payment Status: ${paymentStatus}`;
+    const text = `Booking ID: ${bookingId}\nAmount: ${amount}\nPayment Status: ${paymentStatus}\nPayer ID: ${payerID}`;
+    const html = `
+        <h1>Payment Status: ${paymentStatus}</h1>
+        <p><strong>Booking ID:</strong> ${bookingId}</p>
+        <p><strong>Amount:</strong> ${amount}</p>
+        <p><strong>Payment Status:</strong> ${paymentStatus}</p>
+        <p><strong>Payer ID:</strong> ${payerID}</p>
+    `;
 
-    // // Send email
-    // await sendEmail(booking.user_email, subject, text, html); // Assuming you have customer's email in booking
+    // Send email
+    await sendEmail(booking.user_email, subject, text, html); // Assuming you have customer's email in booking
 
 
 

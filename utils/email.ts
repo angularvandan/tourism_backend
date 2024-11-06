@@ -1,5 +1,8 @@
 // mailer.js
 import nodemailer from 'nodemailer';
+import dotenv from "dotenv";
+dotenv.config();
+
 
 // Create a transporter object
 const transporter = nodemailer.createTransport({
@@ -7,14 +10,14 @@ const transporter = nodemailer.createTransport({
     port: 587, // Common port for SMTP
     secure: false, // Set to true if using port 465
     auth: {
-        user: 'your-email@example.com', // Your email
-        pass: 'your-email-password', // Your email password or app password
+        user: 'vandankumar94312@gmail.com', // Your email
+        pass: process.env.EMAIL_PASSWORD, // Your email password or app password
     },
 });
 
 export const sendEmail = async (to:any, subject:any, text:any, html:any) => {
     const mailOptions = {
-        from: 'your-email@example.com', // Sender address
+        from: 'vandankumar94312@gmail.com', // Sender address
         to, // Recipient address
         subject,
         text, // Plain text body
