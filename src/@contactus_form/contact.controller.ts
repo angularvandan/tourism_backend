@@ -3,11 +3,11 @@ import Contact, { IContact } from './contact.model';
 
 // Create Contact
 export const createContact = asyncHandler(async (req: any, res: any) => {
-  const { first_name, last_name, email, message } = req.body;
+  const { first_name, last_name,phone, email, message } = req.body;
 
   // Validate required fields
-  if (!first_name || !last_name || !email || !message) {
-    res.status(400).json({ message: 'All fields are required: first_name, last_name, email, and message.' });
+  if (!first_name || !last_name || !phone || !email || !message) {
+    res.status(400).json({ message: 'All fields are required: First name, Last name,Phone, email, and message.' });
     return;
   }
 
@@ -15,6 +15,7 @@ export const createContact = asyncHandler(async (req: any, res: any) => {
   const contact: IContact = new Contact({
     first_name,
     last_name,
+    phone,
     email,
     message
   });

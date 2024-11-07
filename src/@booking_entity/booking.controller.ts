@@ -71,11 +71,6 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
 
     const savedBooking = await booking.save();
 
-
-    // Prepare email details
-
-    const subject = `Payment Status: ${paymentStatus}`;
-    const text = `Booking ID: ${booking._id}\nAmount: ${totalPrice}\nPayment Status: ${paymentStatus}\n`;
     //for  start and end date of tour
     const dateObj1 = new Date(tours_details[0].startDate);
     const dateObj2 = new Date(tours_details[0].endDate);
@@ -83,9 +78,17 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
     const formattedStartDate = dateObj1.toLocaleDateString('en-GB'); // Adjust the locale as needed
     const formattedEndDate = dateObj2.toLocaleDateString('en-GB'); // Adjust the locale as needed
 
+    // Prepare email details
+
+    const subject = `You’re booked! Pack your bags – see you on ${formattedStartDate}`;
+    const text = `Booking ID: ${booking._id}\nAmount: ${totalPrice}\nPayment Status: ${paymentStatus}\n`;
+
 
     let html = `
-        <h1 >Payment Status: ${paymentStatus}</h1>
+       <h2>Hi ${user_name},</h2>\n
+        Your booking is confirmed, and we’ll see you on  ${formattedStartDate}! Thank you for booking tours with us in "${tours_details[0].address}". You’ll find details of your reservation and payment details enclosed below.
+
+        <p ><strong>Payment Status:</strong> ${paymentStatus}</p>
         <p><strong>Booking ID:</strong> ${booking._id}</p>
         <p><strong>Name:</strong> ${user_name}</p>
         <p><strong>Mobile:</strong> ${user_mobile}</p>
@@ -117,12 +120,13 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
             <p style="margin-left:20px"><strong>Time:</strong> ${formattedTime}</p>
         </p>`
     }
-    html += `<p><strong>Payment Status:</strong> ${paymentStatus}</p>`;
-
+    html += `<p>If you need to get in touch, you can email or phone us directly. Our customer service team is available [hours] to assist you with any questions or concerns.We look forward to welcoming you soon!</p>
+    <p>Thanks again,</p>
+    <p>The team at Biba Asia</p>`
     // Send email
 
-     // Send email with error handling
-     try {
+    // Send email with error handling
+    try {
         await sendEmail(booking.user_email, subject, text, html);
         res.status(201).json(savedBooking);
     } catch (error) {
