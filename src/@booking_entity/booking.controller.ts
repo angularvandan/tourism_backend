@@ -120,9 +120,22 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
     html += `<p><strong>Payment Status:</strong> ${paymentStatus}</p>`;
 
     // Send email
-    await sendEmail(booking.user_email, subject, text, html); // Assuming you have customer's email in booking
 
-    res.status(201).json(savedBooking);
+     // Send email with error handling
+     try {
+        await sendEmail(booking.user_email, subject, text, html);
+        res.status(201).json(savedBooking);
+    } catch (error) {
+        console.error("Error sending email:", error);
+        res.status(500).json({
+            message: 'Booking created but failed to send email notification.',
+            booking: savedBooking
+        });
+    }
+
+    // await sendEmail(booking.user_email, subject, text, html); // Assuming you have customer's email in booking
+
+    // res.status(500).json(savedBooking);
 });
 // Update only the paymentStatus of a booking
 export const updatePaymentStatus = asyncHandler(async (req: any, res: any) => {
