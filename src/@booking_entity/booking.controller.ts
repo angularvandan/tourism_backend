@@ -52,8 +52,18 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
         return res.status(400).json({ message: 'Tour not found' });
     }
 
+    // for unique readable id 
+    const bookingName = user_name;
+    const bookingEmail = user_email;
+
+    // Generate the readable ID
+    const readableBookingId = generateReadableBookingId(bookingName, bookingEmail);
+
     // Create and save the booking with priceDetails object
     const booking = new Booking({
+
+        readableBookingId,
+        
         user_name,
         user_mobile,
         user_email,
@@ -78,10 +88,11 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
     const formattedStartDate = dateObj1.toLocaleDateString('en-GB'); // Adjust the locale as needed
     const formattedEndDate = dateObj2.toLocaleDateString('en-GB'); // Adjust the locale as needed
 
+
     // Prepare email details
 
     const subject = `You’re booked! Pack your bags – see you on ${formattedStartDate}`;
-    const text = `Booking ID: ${booking._id}\nAmount: ${totalPrice}\nPayment Status: ${paymentStatus}\n`;
+    const text = `Unique ID: ${readableBookingId}\nBooking ID: ${booking._id}\nAmount: ${totalPrice}\nPayment Status: ${paymentStatus}\n`;
 
 
     let html = `
@@ -89,6 +100,7 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
         Your booking is confirmed, and we’ll see you on  ${formattedStartDate}! Thank you for booking tours with us in "${tours_details[0].address}". You’ll find details of your reservation and payment details enclosed below.
 
         <p ><strong>Payment Status:</strong> ${paymentStatus}</p>
+        <p ><strong>Unique ID:</strong> ${readableBookingId}</p>
         <p><strong>Booking ID:</strong> ${booking._id}</p>
         <p><strong>Name:</strong> ${user_name}</p>
         <p><strong>Mobile:</strong> ${user_mobile}</p>
@@ -164,3 +176,14 @@ export const updatePaymentStatus = asyncHandler(async (req: any, res: any) => {
 
     res.status(200).json(booking);
 });
+function generateReadableBookingId(name: string, email: string): string {
+    // Extract the first part of the email before the '@'
+    const emailPart = email.split('@')[0];
+    // Remove spaces and special characters from the name
+    const sanitizedName = name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    // Combine name and email part
+    const readableId = `${sanitizedName}-${emailPart}`;
+    // Optionally add a timestamp or random number for uniqueness
+    const timestamp = Date.now().toString().slice(-5); // Last 5 digits of the timestamp
+    return `${readableId}-${timestamp}`;
+}

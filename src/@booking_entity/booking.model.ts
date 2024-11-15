@@ -7,6 +7,7 @@ interface IPriceDetail {
 }
 
 interface IBooking extends Document {
+    readableBookingId:string;
     user_name: string;
     user_mobile?: string;
     user_email?: string;
@@ -29,6 +30,7 @@ const priceDetailSchema: Schema = new Schema({
 });
 
 const bookingSchema: Schema = new Schema({
+    readableBookingId:{type: String},
     user_name: { type: String, required: true },
     user_mobile: { type: String },
     user_email: { type: String },

@@ -59,7 +59,7 @@ export const createOrder = async (req: Request, res: Response) => {
 };
 
 
-export const storePaymentDetails = asyncHandler(async (req:any, res:any) => {
+export const storePaymentDetails = asyncHandler(async (req: any, res: any) => {
     const { orderID, bookingId, amount, paymentStatus, payerID, errorMessage, errorDetails } = req.body;
 
     // Check for required fields
@@ -80,7 +80,7 @@ export const storePaymentDetails = asyncHandler(async (req:any, res:any) => {
     } else {
         booking.paymentStatus = 'Pending'; // Change to 'Failed' or another status as necessary
     }
-    
+
     // Save the updated booking
     await booking.save();
 
@@ -102,17 +102,25 @@ export const storePaymentDetails = asyncHandler(async (req:any, res:any) => {
     const subject = `Payment Status: ${paymentStatus}`;
     const text = `Booking ID: ${bookingId}\nAmount: ${amount}\nPayment Status: ${paymentStatus}\nPayer ID: ${payerID}`;
     const html = `
+        <h2>Hi ${booking.user_name},</h2>\n
+        Thank you for your payment! We’re excited to confirm that your booking is now complete. Below are the details of your reservation and payment.
+
         <h1>Payment Status: ${paymentStatus}</h1>
+        <p><strong>Booking ID:</strong> ${bookingId.readableBookingId}</p>
         <p><strong>Booking ID:</strong> ${bookingId}</p>
         <p><strong>Amount:</strong> ${amount}</p>
         <p><strong>Payment Status:</strong> ${paymentStatus}</p>
         <p><strong>Payer ID:</strong> ${payerID}</p>
+
+        If you have any questions or need further assistance, feel free to reach out to us. We’re here to help!
+        Thank you for choosing our services. We look forward to hosting you soon.
+
+        Best regards,  
+        The team at Biba Asia
     `;
 
     // Send email
     await sendEmail(booking.user_email, subject, text, html); // Assuming you have customer's email in booking
-
-
 
     // Send response
     res.status(201).json({
@@ -120,6 +128,7 @@ export const storePaymentDetails = asyncHandler(async (req:any, res:any) => {
         payment: savedPayment,
         booking,
     });
+
 });
 
 export const getAllPayments = asyncHandler(async (req: Request, res: Response) => {
