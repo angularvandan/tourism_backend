@@ -57,13 +57,13 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
     const bookingEmail = user_email;
 
     // Generate the readable ID
-    const readableBookingId = generateReadableBookingId(bookingName, bookingEmail);
+    const readableBookingId = generateReadableBookingId();
 
     // Create and save the booking with priceDetails object
     const booking = new Booking({
 
         readableBookingId,
-        
+
         user_name,
         user_mobile,
         user_email,
@@ -105,12 +105,36 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
         <p><strong>Name:</strong> ${user_name}</p>
         <p><strong>Mobile:</strong> ${user_mobile}</p>
         <p><strong>Amount:</strong> ${totalPrice}</p>
-        <p><strong>Tour Details:</strong> <br>
-            <p style="margin-left:20px"><strong>Name:</strong> ${tours_details[0].name}</p>
-            <p style="margin-left:20px"><strong>Address:</strong> ${tours_details[0].address}</p>
-            <p style="margin-left:20px"><strong>Start Dete:</strong> ${formattedStartDate}</p>
-            <p style="margin-left:20px"><strong>End Date:</strong> ${formattedEndDate}</p>
-        </p>
+        <h3>Tour Details: </h3>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Tour Name</th>
+                    <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Address</th>
+                    <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Start Date</th>
+                    <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">End Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tours_details[0].name}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${tours_details[0].address}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${formattedStartDate}</td>
+                    <td style="border: 1px solid #ccc; padding: 8px;">${formattedEndDate}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Spot and Activity Details</h3>
+         <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Spot Name</th>
+                    <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Activity Name</th>
+                    <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Date</th>
+                    <th style="border: 1px solid #ccc; padding: 8px; text-align: left;">Time</th>
+                </tr>
+            </thead>
+            <tbody>
     `;
     for (let i = 1; i < tours_details.length; i++) {
 
@@ -122,17 +146,29 @@ export const createBooking = asyncHandler(async (req: any, res: any) => {
         const formattedDate = dateObj.toLocaleDateString('en-GB'); // Adjust the locale as needed
         const formattedTime = timeObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 
-        html +=
-            `<p><strong>Spot Details:</strong> <br>
-            <p style="margin-left:20px"><strong>Name:</strong> ${tours_details[i].spot_id.name}</p>
-        </p>
-        <p><strong>Activity Details:</strong> <br>
-            <p style="margin-left:20px"><strong>Name:</strong> ${tours_details[i].name}</p>
-            <p style="margin-left:20px"><strong>Date:</strong> ${formattedDate}</p>
-            <p style="margin-left:20px"><strong>Time:</strong> ${formattedTime}</p>
-        </p>`
+        // html +=
+        //     `<p><strong>Spot Details:</strong> <br>
+        //     <p style="margin-left:20px"><strong>Name:</strong> ${tours_details[i].spot_id.name}</p>
+        // </p>
+        // <p><strong>Activity Details:</strong> <br>
+        //     <p style="margin-left:20px"><strong>Name:</strong> ${tours_details[i].name}</p>
+        //     <p style="margin-left:20px"><strong>Date:</strong> ${formattedDate}</p>
+        //     <p style="margin-left:20px"><strong>Time:</strong> ${formattedTime}</p>
+        // </p>`
+        html += `
+        <tr>
+            <td style="border: 1px solid #ccc; padding: 8px;">${tours_details[i].spot_id.name}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">${tours_details[i].name}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">${formattedDate}</td>
+            <td style="border: 1px solid #ccc; padding: 8px;">${formattedTime}</td>
+        </tr>
+    `;
+
     }
-    html += `<p>If you need to get in touch, you can email or phone us directly. Our customer service team is available [hours] to assist you with any questions or concerns.We look forward to welcoming you soon!</p>
+    html += `</tbody>
+    </table>
+    
+    <p>If you need to get in touch, you can email or phone us directly. Our customer service team is available [hours] to assist you with any questions or concerns.We look forward to welcoming you soon!</p>
     <p>Thanks again,</p>
     <p>The team at Biba Asia</p>`
     // Send email
@@ -176,14 +212,10 @@ export const updatePaymentStatus = asyncHandler(async (req: any, res: any) => {
 
     res.status(200).json(booking);
 });
-function generateReadableBookingId(name: string, email: string): string {
-    // Extract the first part of the email before the '@'
-    const emailPart = email.split('@')[0];
-    // Remove spaces and special characters from the name
-    const sanitizedName = name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-    // Combine name and email part
-    const readableId = `${sanitizedName}-${emailPart}`;
-    // Optionally add a timestamp or random number for uniqueness
-    const timestamp = Date.now().toString().slice(-5); // Last 5 digits of the timestamp
-    return `${readableId}-${timestamp}`;
+function generateReadableBookingId(): string {
+
+    const timestamp = Date.now().toString().slice(-3); // Last 5 digits of the timestamp
+    const randomChars = Math.floor(100 + Math.random() * 900);
+
+    return `${timestamp}${randomChars}`;
 }
