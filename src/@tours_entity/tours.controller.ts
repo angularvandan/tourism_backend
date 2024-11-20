@@ -49,6 +49,7 @@ export const updateTour = async (req: Request, res: Response) => {
     try {
         const updatedTour = await Tour.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (updatedTour) {
+            
             res.status(200).json(updatedTour);
         } else {
             res.status(404).json({ message: 'Tour not found' });

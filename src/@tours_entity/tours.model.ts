@@ -13,13 +13,13 @@ interface ITour {
 }
 
 const tourSchema: Schema = new Schema({
-    name: { type: String },
-    title: { type: String },
-    description: { type: String },
-    address: { type: String },
+    name: { type: String ,required:true},
+    title: { type: String,required:true },
+    description: { type: String,required:true },
+    address: { type: String ,required:true},
     images: { type: [String] },
     tips: { type: Schema.Types.Mixed }, // Using Mixed for JSON,
-    price_adult: { type: Number }, // Price for adults
+    price_adult: { type: Number,required:true }, // Price for adults
     price_child: { type: Number }, // Price for children (optional)
     price_infant: { type: Number } // Price for infants (optional)
 });
