@@ -1,6 +1,8 @@
 import Tour from './tours.model';
 import { Request, Response } from 'express';
 import ErrorHandler from '../../utils/errorHandler'
+import Spot from '../@spots_entity/spots.model';
+import Activity from '../@activities_entity/activities.model';
 
 // CREATE Tour
 export const createTour = async (req: any, res: any) => {
@@ -62,9 +64,22 @@ export const updateTour = async (req: Request, res: Response) => {
 // DELETE Tour
 export const deleteTour = async (req: Request, res: Response) => {
     try {
-        const deletedTour = await Tour.findByIdAndDelete(req.params.id);
+        const tourId = req.params.id;
+
+        const deletedTour = await Tour.findByIdAndDelete(tourId);
         if (deletedTour) {
-            res.status(200).json({ message: 'Tour deleted successfully' });
+
+            // Find and delete all spots related to the tour
+            const spots = await Spot.find({ tour_id: tourId });
+            const spotIds = spots.map(spot => spot._id);
+
+            // Delete all spots and their associated activities
+            await Promise.all([
+                Spot.deleteMany({ tour_id: tourId }),
+                Activity.deleteMany({ spot_id: { $in: spotIds } })
+            ]);
+
+            res.status(200).json({ message: 'Tour, spots, and activities deleted successfully' });
         } else {
             res.status(404).json({ message: 'Tour not found' });
         }

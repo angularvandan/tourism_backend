@@ -1,6 +1,7 @@
 import asyncHandler from 'express-async-handler'; // Import express-async-handler
 import Spot from './spots.model';
 import Tour from '../@tours_entity/tours.model'; // Import Tour to validate references
+import Activity from '../@activities_entity/activities.model';
 
 // Get all spots
 export const getSpots = asyncHandler(async (req: any, res: any) => {
@@ -81,10 +82,20 @@ export const updateSpot = asyncHandler(async (req: any, res: any) => {
 
 // Delete a spot by ID
 export const deleteSpot = asyncHandler(async (req: any, res: any) => {
-    const deletedSpot = await Spot.findByIdAndDelete(req.params.id);
-    if (!deletedSpot) {
-        res.status(404).json({ message: 'Spot not found' });
-    } else {
-        res.status(200).json({ message: 'Spot Deleted Successfully!' });
+    try {
+        const spotId = req.params.id;
+
+        // Find and delete the spot
+        const deletedSpot = await Spot.findByIdAndDelete(spotId);
+        if (!deletedSpot) {
+            return res.status(404).json({ message: 'Spot not found' });
+        }
+
+        // Delete all activities related to the spot
+        await Activity.deleteMany({ spot_id: spotId });
+
+        res.status(200).json({ message: 'Spot and related activities deleted successfully!' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting spot and activities', error });
     }
 });
